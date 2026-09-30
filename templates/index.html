@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f6f2">
+    <title>House Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page-shell">
+        <section class="prediction-card" aria-labelledby="page-title">
+            <header class="page-header">
+                <p class="eyebrow">PROPERTY ESTIMATE</p>
+                <h1 id="page-title">House Price Prediction</h1>
+                <p class="subtitle">Enter the house details to estimate its price.</p>
+            </header>
+
+            {% if error %}
+                <div class="message error-message" role="alert">{{ error }}</div>
+            {% endif %}
+
+            {% if prediction %}
+                <section class="result-panel" aria-live="polite" aria-label="Prediction result">
+                    <p class="result-label">Predicted House Price</p>
+                    <p class="result-amount">{{ prediction }}</p>
+                </section>
+            {% endif %}
+
+            <form method="post" action="{{ url_for('index') }}">
+                <div class="form-grid">
+                    {% for field in fields %}
+                        <div class="form-field">
+                            <label for="{{ field.name }}">{{ field.label }}</label>
+                            <input
+                                id="{{ field.name }}"
+                                name="{{ field.name }}"
+                                type="number"
+                                step="{{ field.step }}"
+                                {% if field.min is not none %}min="{{ field.min }}"{% endif %}
+                                {% if field.max %}max="{{ field.max }}"{% endif %}
+                                value="{{ form_data.get(field.name, '') }}"
+                                required
+                            >
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="submit-button" type="submit">Predict House Price</button>
+            </form>
+           
+    </main>
+</body>
+</html>
